@@ -3,3 +3,5 @@ make
 
 cd obj
 ./kk
+
+Go to browser URL:http://localhost:8887/
