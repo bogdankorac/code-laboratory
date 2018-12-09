@@ -49,7 +49,7 @@ void prepareCreditPlan(CCreditUser *usr, int usrNo, int year, char *out)
 		<body>	\n\
 		<h1>Plan Otplate za %d meseci</h1>	\n\
 		<p>	\n\
-		<br>\n", year*12, year);
+		<br>\n", year*12);
 	sprintf(out+strlen(out),
 			"<table border=\"1\">\n");
 	sprintf(out+strlen(out),
