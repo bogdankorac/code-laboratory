@@ -5,11 +5,16 @@
 export CC := g++
 
 # PROJECT NAME
-PROJECT := kk
+PROJECT := kk_mingw32
 
 # SOURCE FILES
+ifeq ($(PROJECT),kk_mingw32)
 SOURCES := \
-    src/main.c \
+    src/main.c
+else
+SOURCES := \
+    src/main.c
+endif
 
 # INCLUDE PATHS
 INCLUDES := \
@@ -18,15 +23,35 @@ INCLUDES := \
     $(TOOL_GCC_PATH)/lib/gcc/mingw32/4.6.2/include
 
 # DEFINES
+ifeq ($(PROJECT),kk_mingw32)
 DEFINES := \
-    HTML=1 \
+    MINGW32=1 \
+    HTML=1
+else
+DEFINES := \
+    HTML=1
+endif
     
 # LIBRARIES
+ifeq ($(PROJECT),kk_mingw32)
 LIBPATH := \
-	libs
-	
+      libs \
+	$(TOOL_GCC_PATH)/lib \
+	$(TOOL_GCC_PATH)/lib/gcc/mingw32/4.6.2/include
+else
+LIBPATH := \
+      libs
+endif
+
+# LIBS
+ifeq ($(PROJECT),kk_mingw32)
 LIBS := \
-        CreditUser
+     CreditUserMinGW \
+	ws2_32
+else
+LIBS := \
+     CreditUser
+endif
 
 
 CFLAGS = -c
