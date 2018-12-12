@@ -5,7 +5,7 @@
 export CC := g++
 
 # PROJECT NAME
-PROJECT := kk_mingw32
+PROJECT := kk
 
 # SOURCE FILES
 ifeq ($(PROJECT),kk_mingw32)
