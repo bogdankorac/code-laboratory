@@ -1,0 +1,36 @@
+Content-Type: text/html
+
+<form action=\"http://localhost:8887/\" method=post>
+<fieldset>
+<legend><font size=\"4\" color=\"blue\">Mali kreditni kalkulator</font></legend>
+<p>
+	Iznos:<input type=text name=iznos value=%d><br>
+	Ucesce:<input type=text name=ucesce value=%d>
+</p><br>
+<p>
+<table border=\"1\">
+	<tr>
+		<td><font size=\"3\" color=\"blue\">Korisnik 1</font></td>
+		<td><font size=\"3\" color=\"blue\">Korisnik 2(solidarni duznik)</font></td>
+	</tr>
+	<tr>
+		<td>Ime:<input type=text name=Ime1 value=%s></td>
+		<td>Ime:<input type=text name=Ime2 value=%s></td>
+	</tr>
+	<tr>
+		<td>Kamata(%c):<input type=text name=Kamata1 value=%0.2f></td>
+		<td>Kamata(%c):<input type=text name=Kamata2 value=%0.2f></td>
+	</tr>
+	<tr>
+		<td>Limit:<input type=text name=Limit1 value=%0.1f></td>
+		<td>Limit:<input type=text name=Limit2 value=%0.1f></td>
+	</tr>
+</p>
+</table><br>
+	<input type=submit value=Racunaj>
+</form>
+</fieldset><br>
+<small>
+*  Korisnik 2 ostaviti prazno ukoliko se racuna za jednog korisnika(bez solidarnog duznika)<br>
+** Limit obicno iznosi 40%c mesecnih primanja<br>
+</small>
