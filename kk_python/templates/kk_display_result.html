@@ -1,0 +1,22 @@
+Content-Type: text/html
+
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Kreditna kalkulacija</h1>
+<p>
+UKUPNI IZNOS: {{ params["iznos"] }}<br>
+UCESCE: {{ params["ucesce"] }}<br>
+KREDITNI LIMIT: {{ params["Limit1"] }}<br><br>
+<table border=\"1\">
+<tr><td><b>Godina</td><td><b>Korisnik</td><td><b>Iznos(Vraceno)</td><td><b>Rata</td><td><b>Kamata</td><td><b>Plan Otplate</td></tr>
+{% for year in range(1,31) %}
+{% if (params["Limit1"] >= usr0_getAnuityOnYear(year)) and ((params["iznos"]  - params["ucesce"]) <= usr0_getAmmountOnYear(year)) %}
+<tr><td>{{year}}</td><td>{{params["Ime1"]}}</td><td>{{usr0_getAmmountOnYear(year)}}({{year * 12 *usr0_getAnuityOnYear(year)}})</td><td>{{usr0_getAnuityOnYear(year)}}</td><td>{{params["Kamata1"]}}%</td><td><a href=\http://localhost:8887/?usrreport=0&yearreport={{year}}\>{{year * 12}} meseci</a></td></tr>
+{% endif %}
+{% endfor -%}
+</table><br><br>
+<br><a href=\"http://localhost:8887/?newcalc=1\">Napravi Novu Kalkulaciju</a><br>
+</p>
+</body>
+</html>

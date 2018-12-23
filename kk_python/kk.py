@@ -11,6 +11,7 @@ import pickle
 import time
 import datetime
 import string
+from CreditUser import CCreditUser
 from jinja2 import Environment, FileSystemLoader
 
 #classes
@@ -32,6 +33,7 @@ class CRequestData(object):
 gConnections = 0
 gServerUrl = "http://localhost:8887/"
 DEFAULT_PAGE = "kk_form.html"
+DISPLAY_RESULT = "kk_display_result.html"
 
 #setting environment for jinja2
 PATH = os.path.dirname(os.path.abspath(__file__))
@@ -40,12 +42,13 @@ gTemplateEnvironment = Environment(
     loader=FileSystemLoader(os.path.join(PATH, 'templates')),
     trim_blocks=False)
 
+
 #functions
 def render_template(template_filename, context):
     return gTemplateEnvironment.get_template(template_filename).render(context)
 
-def fResponse2(page,params):
-	context = {'params' : params,'home' : gServerUrl}
+def fResponse2(page,params,user):
+	context = {'user' : user, 'params' : params,'home' : gServerUrl}
         print "context passed to fResponse2:"
         print context
 	return render_template(page,context)
@@ -124,10 +127,11 @@ def parseClientRequest(request,requestData):
 
 	l = request.find("newcalc")
 	if(l > 0):
-		try:
-			requestData.newcalc = int(request[(l + len("newcalc") + 1) : (l + request[l : ].find("&"))])
-		except:
-			requestData.newcalc = 0
+		requestData.newcalc = 1
+	else:
+		requestData.newcalc = 0
+
+
 	return
 
 
@@ -140,6 +144,16 @@ sock.listen(1) # don't queue up any requests
 
 #init request data
 reqData = CRequestData()
+
+#init credit users
+usr1 = CCreditUser()
+usr2 = CCreditUser()
+usr3 = CCreditUser()
+users = [usr1, usr2, usr3]
+
+#pass helper functions to jinja template as globals
+gTemplateEnvironment.globals['usr0_getAmmountOnYear'] = users[0].getAmmountOnYear
+gTemplateEnvironment.globals['usr0_getAnuityOnYear'] = users[0].getAnuityOnYear
 
 #some print
 print("set path to %s"%PATH)
@@ -170,12 +184,40 @@ while True:
 		print ("usrreport:%d")%reqData.usrreport
 		print ("yearreport:%d")%reqData.yearreport
 		print ("newcalc:%d")%reqData.newcalc
+		
+	params["iznos"] = reqData.iznos
+	params["ucesce"] = reqData.ucesce
+	params["Ime1"] = reqData.ime1
+	params["Ime2"] = reqData.ime2
+	params["Kamata1"] = reqData.kamata1
+	params["Kamata2"] = reqData.kamata2
+	params["Limit1"] = reqData.limit1
+	params["Limit2"] = reqData.limit2
+	params["usrreport"] = reqData.usrreport
+	params["yearreport"] = reqData.yearreport
+	params["newcalc"] = reqData.newcalc
+	
+	if(reqData.ime1 != ""):
+		users[0].AddName(reqData.ime1);
+		if((reqData.kamata1 > 100) or (reqData.kamata1 < 0)):
+			reqData.kamata1 = 1
+		users[0].setRate(reqData.kamata1)
+		users[0].setAnuityLimit(reqData.limit1)
+		users[0].setTotalAmmount(reqData.iznos - reqData.ucesce)
+		users[0].calculateTotalAnuityOnRate()
+		users[0].calculateRateOnAmmount()
+		page = DISPLAY_RESULT
+
+	
+	if(reqData.newcalc == 1):
+		reqData.newcalc = 0
+		page = DEFAULT_PAGE
 
 	# Return 200 OK an the page
-	csock.sendall("HTTP/1.0 200 OK\n" + fResponse2(page,params))
+	csock.sendall("HTTP/1.0 200 OK\n" + fResponse2(page,params,users[0]))
 
     else:
         # If there was no recognised command then return a 404 (page not found)
         print "Returning 404"
-        csock.sendall("HTTP/1.0 404 Not Found\n"+fResponse2("page_not_found.html",params))
+        csock.sendall("HTTP/1.0 404 Not Found\n"+fResponse2("page_not_found.html",params,users[0]))
     csock.close()
