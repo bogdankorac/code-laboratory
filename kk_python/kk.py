@@ -172,7 +172,24 @@ while True:
 
         #if there are parameters passed, we will parse them here
 	parseClientRequest(req, reqData)
+
+	if(reqData.newcalc == 1):
+		# reset request data in case of nw calculation
+		reqData.iznos = 0
+		reqData.ucesce = 0
+		reqData.ime1 = ""
+		reqData.ime2 = ""
+		reqData.kamata1 = 0
+		reqData.kamata2 = 0
+		reqData.limit1 = 0
+		reqData.limit2 = 0
+		reqData.usrreport = 0
+		reqData.yearreport = 0
+		reqData.newcalc = 0
+		page = DEFAULT_PAGE
+
 	if(True):
+		#debug information
 		print ("iznos:%d")%reqData.iznos
 		print ("ucesce:%d")%reqData.ucesce
 		print ("Ime1:%s")%reqData.ime1
@@ -184,7 +201,8 @@ while True:
 		print ("usrreport:%d")%reqData.usrreport
 		print ("yearreport:%d")%reqData.yearreport
 		print ("newcalc:%d")%reqData.newcalc
-		
+
+	# setting request data which will be passed to jinja template		
 	params["iznos"] = reqData.iznos
 	params["ucesce"] = reqData.ucesce
 	params["Ime1"] = reqData.ime1
@@ -195,8 +213,9 @@ while True:
 	params["Limit2"] = reqData.limit2
 	params["usrreport"] = reqData.usrreport
 	params["yearreport"] = reqData.yearreport
-	params["newcalc"] = reqData.newcalc
-	
+	params["newcalc"] = reqData.newcalc	
+
+	#doing calculation in case of one user
 	if(reqData.ime1 != ""):
 		users[0].AddName(reqData.ime1);
 		if((reqData.kamata1 > 100) or (reqData.kamata1 < 0)):
@@ -208,10 +227,6 @@ while True:
 		users[0].calculateRateOnAmmount()
 		page = DISPLAY_RESULT
 
-	
-	if(reqData.newcalc == 1):
-		reqData.newcalc = 0
-		page = DEFAULT_PAGE
 
 	# Return 200 OK an the page
 	csock.sendall("HTTP/1.0 200 OK\n" + fResponse2(page,params,users[0]))
