@@ -49,13 +49,4 @@ class CCreditUser(object):
         return lib2.CCreditUser_getAmmountOnYear(self.obj, year)
 
 print "Loaded CreditUser module"
-#us = CCreditUser()
-#us.setRate(3.4)
 
-#us.setAnuityLimit(500)
-#us.AddName("Bogdan")
-#us.setTotalAmmount(30000)
-#us.calculateTotalAnuityOnRate()
-#us.calculateRateOnAmmount()
-#print "anuitet za trinaestu godinu"
-#print us.getAnuityOnYear(12)
