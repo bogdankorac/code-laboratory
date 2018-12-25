@@ -34,6 +34,7 @@ gConnections = 0
 gServerUrl = "http://localhost:8887/"
 DEFAULT_PAGE = "kk_form.html"
 DISPLAY_RESULT = "kk_display_result.html"
+PREPARE_CREDIT_PLAN = "kk_prepare_credit_plan.html"
 
 #setting environment for jinja2
 PATH = os.path.dirname(os.path.abspath(__file__))
@@ -121,7 +122,7 @@ def parseClientRequest(request,requestData):
 	l = request.find("yearreport")
 	if(l > 0):
 		try:
-			requestData.yearreport = int(request[(l + len("yearreport") + 1) : (l + request[l : ].find("&"))])
+			requestData.yearreport = int(request[(l + len("yearreport") + 1) : (l + request[l : ].find("\\"))])
 		except:
 			requestData.yearreport = 0
 
@@ -154,6 +155,7 @@ users = [usr1, usr2, usr3]
 #pass helper functions to jinja template as globals
 gTemplateEnvironment.globals['usr0_getAmmountOnYear'] = users[0].getAmmountOnYear
 gTemplateEnvironment.globals['usr0_getAnuityOnYear'] = users[0].getAnuityOnYear
+gTemplateEnvironment.globals['usr0_getCreditPlanOnYearAndMonth'] = users[0].getCreditPlanOnYearAndMonth
 
 #some print
 print("set path to %s"%PATH)
@@ -225,7 +227,10 @@ while True:
 		users[0].setTotalAmmount(reqData.iznos - reqData.ucesce)
 		users[0].calculateTotalAnuityOnRate()
 		users[0].calculateRateOnAmmount()
-		page = DISPLAY_RESULT
+		if(reqData.yearreport == 0):
+			page = DISPLAY_RESULT
+		else:
+			page = PREPARE_CREDIT_PLAN
 
 
 	# Return 200 OK an the page

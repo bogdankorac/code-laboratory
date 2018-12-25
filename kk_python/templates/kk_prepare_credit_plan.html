@@ -1,0 +1,43 @@
+nContent-Type: text/html
+
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Plan Otplate za {{params["yearreport"]*12}} meseci</h1>
+<p>
+<br>
+<table border=\"1\">
+<tr><td><b>Mesec</td><td><b>Ukupno</td><td><b>Glavnica</td><td><b>Otplata</td><td><b>Rata</td></tr>
+{% set anuityOnYear = usr0_getAnuityOnYear(params["yearreport"]) %}
+{% set ukupno = params["yearreport"] * 12 * anuityOnYear -%}
+{% for month in range(0,params["yearreport"]*12) %}
+{% set ukupno = ukupno - month*anuityOnYear %}
+<tr>
+<td>{{month+1}}</td>
+<td>{{ukupno|round(2,'ceil')}}</td>
+<td>
+{% if month == 0 %}
+{{usr0_getAmmountOnYear(params["yearreport"])|round(2,'ceil')}}
+{% else %}
+{{usr0_getCreditPlanOnYearAndMonth(params["yearreport"],month-1)|round(2,'ceil')}}
+{% endif %}</td>
+<td>
+{% if month == 0 %}
+{{(usr0_getAmmountOnYear(params["yearreport"]) - usr0_getCreditPlanOnYearAndMonth(params["yearreport"],month))|round(2,'ceil')}}
+{% else %}
+{{(usr0_getCreditPlanOnYearAndMonth(params["yearreport"],month-1) - usr0_getCreditPlanOnYearAndMonth(params["yearreport"],month))|round(2,'ceil')}}
+{% endif %}
+</td>
+<td>
+{{usr0_getAnuityOnYear(params["yearreport"])|round(2,'ceil')}}
+</td>
+</tr>
+{% endfor -%}
+
+</table><br><br>
+
+<br><a href=\"http://localhost:8887/?newcalc=1\">Napravi Novu Kalkulaciju</a><br>
+
+</p>
+</body>
+</html>

@@ -22,6 +22,8 @@ class CCreditUser(object):
         lib2.CCreditUser_getAnuityOnYear.restype = ctypes.c_double
         lib2.CCreditUser_getAmmountOnYear.argtypes = [ctypes.c_void_p,ctypes.c_int]
         lib2.CCreditUser_getAmmountOnYear.restype = ctypes.c_double
+        lib2.CCreditUser_getCreditPlanOnYearAndMonth.argtypes = [ctypes.c_void_p,ctypes.c_int,ctypes.c_int]
+        lib2.CCreditUser_getCreditPlanOnYearAndMonth.restype = ctypes.c_double
         self.obj = lib2.CCreditUser_new()
 
     def setRate(self, rate):
@@ -47,6 +49,9 @@ class CCreditUser(object):
 
     def getAmmountOnYear(self, year):
         return lib2.CCreditUser_getAmmountOnYear(self.obj, year)
+
+    def getCreditPlanOnYearAndMonth(self, year, month):
+        return lib2.CCreditUser_getCreditPlanOnYearAndMonth(self.obj, year, month)
 
 print "Loaded CreditUser module"
 

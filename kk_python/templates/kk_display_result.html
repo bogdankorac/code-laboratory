@@ -12,7 +12,7 @@ KREDITNI LIMIT: {{ params["Limit1"] }}<br><br>
 <tr><td><b>Godina</td><td><b>Korisnik</td><td><b>Iznos(Vraceno)</td><td><b>Rata</td><td><b>Kamata</td><td><b>Plan Otplate</td></tr>
 {% for year in range(1,31) %}
 {% if (params["Limit1"] >= usr0_getAnuityOnYear(year)) and ((params["iznos"]  - params["ucesce"]) <= usr0_getAmmountOnYear(year)) %}
-<tr><td>{{year}}</td><td>{{params["Ime1"]}}</td><td>{{usr0_getAmmountOnYear(year)}}({{year * 12 *usr0_getAnuityOnYear(year)}})</td><td>{{usr0_getAnuityOnYear(year)}}</td><td>{{params["Kamata1"]}}%</td><td><a href=\http://localhost:8887/?usrreport=0&yearreport={{year}}\>{{year * 12}} meseci</a></td></tr>
+<tr><td>{{year}}</td><td>{{params["Ime1"]}}</td><td>{{usr0_getAmmountOnYear(year)|round(2,'ceil')}}({{(year * 12 *usr0_getAnuityOnYear(year))|round(2,'ceil')}})</td><td>{{usr0_getAnuityOnYear(year)|round(2,'ceil')}}</td><td>{{params["Kamata1"]}}%</td><td><a href=\http://localhost:8887/?usrreport=0&yearreport={{year}}\>{{year * 12}} meseci</a></td></tr>
 {% endif %}
 {% endfor -%}
 </table><br><br>
